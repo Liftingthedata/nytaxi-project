@@ -29,8 +29,6 @@ gcp_secret = Secret(
     key="keyfile.json",
 )
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=gcp_secret
-
 default_args = {
     "owner": "airflow",
     "start_date": datetime.now(),
