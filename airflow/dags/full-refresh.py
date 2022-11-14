@@ -29,7 +29,7 @@ gcp_secret = Secret(
     key="keyfile.json",
 )
 
-os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT"]= f'google-cloud-platform://?extra__google_cloud_platform__keyfile_dict={gcp_secret}'
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=gcp_secret
 
 default_args = {
     "owner": "airflow",
