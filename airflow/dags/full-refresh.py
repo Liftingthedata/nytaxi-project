@@ -13,6 +13,9 @@ from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
 
+import google.auth
+
+credentials, project_id = google.auth.default()
 
 
 aws_secret = Secret(
