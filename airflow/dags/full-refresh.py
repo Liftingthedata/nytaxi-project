@@ -12,6 +12,9 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
+import google.auth
+
+credentials, project_id = google.auth.default()
 
 aws_secret = Secret(
     deploy_type="env",
@@ -62,7 +65,6 @@ with DAG(
         image="eu.gcr.io/stella-luxury-taxi/transfer-pod",
         secrets=[aws_secret, gcp_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET},
-        gcp_conn_id='google_cloud_default'
     )
 
     from_s3_to_gcs
