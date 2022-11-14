@@ -13,10 +13,8 @@ from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
 
-import google.auth
 
-credentials, project_id = google.auth.default()
-
+os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__keyfile_dict={gcp_secret}'
 
 aws_secret = Secret(
     deploy_type="env",
@@ -31,6 +29,8 @@ gcp_secret = Secret(
     secret="gcsfs-creds",
     key="keyfile.json",
 )
+
+os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__keyfile_dict={gcp_secret}'
 
 default_args = {
     "owner": "airflow",
