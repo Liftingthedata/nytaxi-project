@@ -34,7 +34,7 @@ default_args = {
     "depends_on_past": False,
     "retries": 2,
     "retry_delay": timedelta(minutes=60),
-    gcp_conn_id='google_cloud_default'
+   
 }
 
 with DAG(
@@ -62,6 +62,7 @@ with DAG(
         image="eu.gcr.io/stella-luxury-taxi/transfer-pod",
         secrets=[aws_secret, gcp_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET},
+        gcp_conn_id='google_cloud_default'
     )
 
     from_s3_to_gcs
