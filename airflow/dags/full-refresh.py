@@ -13,7 +13,8 @@ from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
 # from google.auth import compute_engine
-
+os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT']='google-cloud-platform://'
+  
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
