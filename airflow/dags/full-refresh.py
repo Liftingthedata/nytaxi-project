@@ -22,6 +22,10 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
+from google.oauth2 import service_account
+
+credentials = service_account.Credentials.from_service_account_file(
+    '/secrets/keyfile.json')
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/secrets/keyfile.json"
 x = os.system("cat /secrets/keyfile.json")
 logger.info(x)
