@@ -55,12 +55,12 @@ logger.addHandler(ch)
 #     # Key in the form of service account file name
 #     key='aws-creds.json')
 
-gcp_secret = Secret(
-    deploy_type="volume",
-    deploy_target="etc/gcp/",
-    secret="gcsfs-creds",
-    key="keyfile.json",
-)
+# gcp_secret = Secret(
+#     deploy_type="volume",
+#     deploy_target="etc/gcp/",
+#     secret="gcsfs-creds",
+#     key="keyfile.json",
+# )
 
 # # os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__key_secret_name={gcp_secret}'
 
@@ -97,7 +97,7 @@ with DAG(
 #         cmds=["/bin/bash", "./extract_data.sh", "yellow"],
         namespace="default",
         image="alpine",
-        secrets=[gcp_secret],
+#         secrets=[gcp_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
                  , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
     )
