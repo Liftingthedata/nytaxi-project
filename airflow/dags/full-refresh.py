@@ -14,7 +14,7 @@ from airflow.providers.google.cloud.operators.kubernetes_engine import (
 )
 # from google.auth import compute_engine
 
-
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/secrets/keyfile.json"
 # credentials = compute_engine.Credentials()
 aws_secret = Secret(
     deploy_type='volume',
