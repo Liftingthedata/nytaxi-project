@@ -66,7 +66,7 @@ with DAG(
         cmds=["/bin/bash", "./extract_data.sh", "yellow"],
         namespace="default",
         image="eu.gcr.io/stella-luxury-taxi/transfer-pod",
-        servuce_account_name="gkesa"
+        servuce_account_name="gkesa",
         secrets=[aws_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
                  , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
