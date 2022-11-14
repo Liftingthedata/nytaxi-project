@@ -13,7 +13,7 @@ from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
 # from google.auth import compute_engine
-# os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT']='google-cloud-platform://'
+
   
 # from google.oauth2 import service_account
 # from googleapiclient import discovery
