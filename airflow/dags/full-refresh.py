@@ -7,14 +7,25 @@ from airflow.kubernetes.secret import Secret
 # from airflow.models.baseoperator import chain
 # from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
-
+import logging
 # from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
 # from google.auth import compute_engine
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/secrets/keyfile.json"
+x = os.system("cat /secrets/keyfile.json")
+logger.info(x)
+
 # credentials = compute_engine.Credentials()
 aws_secret = Secret(
     deploy_type='volume',
