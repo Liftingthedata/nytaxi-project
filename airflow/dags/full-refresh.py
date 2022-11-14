@@ -87,7 +87,7 @@ with DAG(
     STAGING_BUCKET = os.getenv("STAGING_BUCKET")
 
     
-   kubernetes_secret_vars_ex = KubernetesPodOperator(
+    kubernetes_secret_vars_ex = KubernetesPodOperator(
     task_id='ex-kube-secrets',
     name='ex-kube-secrets',
     namespace='default',
@@ -116,5 +116,4 @@ with DAG(
 #         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
 #                  , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
 #     )
-
     kubernetes_secret_vars_ex
