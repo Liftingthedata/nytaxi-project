@@ -12,7 +12,10 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
+from google.auth import compute_engine
 
+
+credentials = compute_engine.Credentials()
 
 aws_secret = Secret(
     deploy_type="env",
@@ -21,14 +24,14 @@ aws_secret = Secret(
     key="aws-creds.json",
 )
 
-gcp_secret = Secret(
-    deploy_type="env",
-    deploy_target="GOOGLE_APPLICATION_CREDENTIALS",
-    secret="gcsfs-creds",
-    key="keyfile.json",
-)
+# gcp_secret = Secret(
+#     deploy_type="env",
+#     deploy_target="GOOGLE_APPLICATION_CREDENTIALS",
+#     secret="gcsfs-creds",
+#     key="keyfile.json",
+# )
 
-os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__key_secret_name={gcp_secret}'
+# os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__key_secret_name={gcp_secret}'
 
 default_args = {
     "owner": "airflow",
