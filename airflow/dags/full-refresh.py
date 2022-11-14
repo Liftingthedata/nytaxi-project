@@ -14,8 +14,6 @@ from airflow.providers.google.cloud.operators.kubernetes_engine import (
 )
 
 
-os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__keyfile_dict={gcp_secret}'
-
 aws_secret = Secret(
     deploy_type="env",
     deploy_target="AWS_CREDS",
