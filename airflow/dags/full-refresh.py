@@ -65,7 +65,7 @@ with DAG(
         cmds=["bash ./extract_data.sh yellow"],
         namespace="default",
         image="eu.gcr.io/stella-luxury-taxi/transfer-pod",
-        secrets=[aws_secret, gcp_secret],
+        secrets=[aws_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET},
     )
 
