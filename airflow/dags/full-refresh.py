@@ -35,7 +35,7 @@ gcp_sa_credentials={
 project_id=gcp_sa_credentials["project_id"]
 
 credentials = service_account.Credentials.from_service_account_info(gcp_sa_credentials)
-client = dns.Client(project=project_id,credentials=credentials)
+
     
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
