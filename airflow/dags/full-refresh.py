@@ -3,10 +3,12 @@ from datetime import datetime, timedelta
 
 from airflow import DAG
 from airflow.kubernetes.secret import Secret
-from airflow.models.baseoperator import chain
-from airflow.operators.bash import BashOperator
+
+# from airflow.models.baseoperator import chain
+# from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
-from airflow.operators.trigger_dagrun import TriggerDagRunOperator
+
+# from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
@@ -56,7 +58,11 @@ with DAG(
         cluster_name=CLUSTER_NAME,
         cmds=["bash ./extract_data.sh yellow"],
         namespace="default",
-        image="eu.gcr.io/stella-luxury-taxi/transfer-pod",
+        image="google/cloud-sdk:slim",
         secrets=[aws_secret, gcp_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET},
     )
+
+    from_s3_to_gcs
+
+    spark_job = PythonOperator()
