@@ -15,6 +15,28 @@ from airflow.providers.google.cloud.operators.kubernetes_engine import (
 # from google.auth import compute_engine
 os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT']='google-cloud-platform://'
   
+from google.oauth2 import service_account
+from googleapiclient import discovery
+
+#Downloaded credentials in JSON format
+gcp_sa_credentials={
+  "type": "service_account",
+  "project_id": "stella-luxury-taxi",
+  "private_key_id": "e6897c764237693277647217f46edcc971d6fa03",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCp7TdAB7pjalXw\nlrv69Jo+oOUljranFpqJNiGcQ3NJEhEbN7XFDBG8unn+vZwPwE0cfTk11C/B2WLR\nZwzJf4ivQ7IqlNKgYWbQJGpFCwDX1YnSNFbZyNddMyg0FuEvuQ//xSBTfrhb6Vl2\nQ9YQLovFHn40XTs+NsTLQZdeknOEdsA8aMR74/Q71EJP+RnMJ8uZnWIIpEVn1TyE\n/fLOBePTUMwgEtPkhsHWycyW4u9DQi7wcp2zNA+1nBb7I34laAf/cLFdLU3MSDuH\nz/nMHpTHzEbSaIpjYqFOQfgGEUn86g46/YoA8/J3/cOKG0WVXIFNJ5bVST1zgEHP\nIM2gOq77AgMBAAECggEACs6TXPcg24G/xXVQrz0vMhx5dlIFO8ssON3AdXe0tUj4\n3YpFfSqvVhll+NWGP1ozjURJhyrffqycpESxg38g6kSb6Cle2+RV7ZbjS1DP1Oo3\nwa6id2dWiw7d17I80BQs+E9JJwZAI1hL4EGgM5dCPF8cF6h2RBannWWmgtU9k4b/\nGz2dznZoQMVN/q09zYW/jeQbvkvldSfvuuJH3ucMPwGXVZdEPpz9i5ut9tc/af6J\nn0H8f67PMD8X3kkDCYj4IL1KCNEY7+ftoY7+Imd3FRH6uPEw17FkEYFqFb/FIxRi\nm8lYj/MjswBdHZCuyqMIFI+xgQXPkFf/dzXOAyLAwQKBgQDvQF8lPUOZ7GSx+Dni\n2Ik+7OGkJC8cR29Qbv4Wsz11bzqNTvNajdGTUQW2KF3L84D7qsLVvgbfAmczFMDx\nGeV8VdXhNkLjxsCLqYxU7S+gN8ifCZwVCMPSEa9kDdir52UZzLwH1sHYzd4LPdra\nKl+WMo0VeTXt15Sr3z71Q713tQKBgQC10nkY2iErMKFEbajUBJlS9jZ7aSXSFzjo\neSGYOVBYZi9oJD/KizUsB2kWxK4HOkKyq6sgyrdVHm3hmqk52SUVoWkD3IcNF6hE\nqOm+Vf2a2yColnB2xhd0KBcGgi4fIy8buqpkmn2Lxl+XAyx/XCKWH4fzzZ9QNrn4\nQhuBVRJZ7wKBgQDSbCNCdWeHcUn+3PrMcPYEygKKguiMTqewbm47ONnM907gCZgv\nBJxWnOQRGd+lCT1gGwfRRZh1e3+YhaBMbSJRAI1jzn12J9AhBbXO2+0PVQC2H5WP\nSm4vzC4eKa9vQczBrDeUDWXgcO/hoz1gs/Pt/ffn8vtjfD/eCjMtM67oIQKBgCSK\ndyHifLYEYPSyoTJy9ilxKAPnXt15I0u9RF4mbppFdxOT7WoUTgxaNOmJf3weXlcw\nHwVJGE03/1dO0OG6XTSaqtNG17Fu5rddxxQkjgI4NbkL+vAz4XTLtczuDrzdQlNt\nUV9EmSSlKoLb9W5nIuBO1/DMi08AoKFfD84PPc/rAoGBALBmwjsygh4HbO1hrbdT\n2Q44LZpYL0PRCMLVRGtaBh10/TinQuie+pMa+sqrpNb0T9NnE6n3NN9ewDbTZ279\njkuOQVpoHZPWGwGC0ki9aupDK7Sr5RcUT9vMyN5GtSky8DwkKrRPUX/3QIR9LSDA\n9rUdxCeXAYlsYkK4m8mDJUIz\n-----END PRIVATE KEY-----\n",
+  "client_email": "gke-sa@stella-luxury-taxi.iam.gserviceaccount.com",
+  "client_id": "106181116653793762876",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gke-sa%40stella-luxury-taxi.iam.gserviceaccount.com"
+}
+
+project_id=gcp_sa_credentials["project_id"]
+
+credentials = service_account.Credentials.from_service_account_info(gcp_sa_credentials)
+client = dns.Client(project=project_id,credentials=credentials)
+    
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
