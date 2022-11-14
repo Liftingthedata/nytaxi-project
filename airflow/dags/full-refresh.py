@@ -91,8 +91,9 @@ with DAG(
     task_id='ex-kube-secrets',
     name='ex-kube-secrets',
     namespace='default',
+    service_account_name="gkesa"
     image='alpine',
-    cmds=["/bin/bash", "./extract_data.sh", "yellow"],
+    cmds=["echo", "yellow yellow"],
     # The secrets to pass to Pod, the Pod will fail to create if the
     # secrets you specify in a Secret object do not exist in Kubernetes.
     # env_vars allows you to specify environment variables for your
@@ -100,6 +101,8 @@ with DAG(
     env_vars={
         'EXAMPLE_VAR': '/example/value',
         'GOOGLE_APPLICATION_CREDENTIALS': '/var/secrets/google/service-account.json '})
+    
+    
 #     from_s3_to_gcs = GKEStartPodOperator(
 #         # The ID specified for the task.
 #         task_id="data-transfer-task",
