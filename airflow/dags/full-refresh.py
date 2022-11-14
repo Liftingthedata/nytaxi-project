@@ -72,7 +72,7 @@ default_args = {
     "retry_delay": timedelta(minutes=60),
    
 }
-
+#eu.gcr.io/stella-luxury-taxi/transfer-pod1
 with DAG(
     dag_id="full-refresh",
     schedule_interval=None,
@@ -93,9 +93,10 @@ with DAG(
         project_id=PROJECT,
         location=CLUSTER_REGION,  # type: ignore
         cluster_name=CLUSTER_NAME,
-        cmds=["/bin/bash", "./extract_data.sh", "yellow"],
+        cmds=["/bin/bash/", "echo", "hello"]
+#         cmds=["/bin/bash", "./extract_data.sh", "yellow"],
         namespace="default",
-        image="eu.gcr.io/stella-luxury-taxi/transfer-pod1",
+        image="alpine",
         secrets=[gcp_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
                  , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
