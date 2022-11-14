@@ -91,7 +91,7 @@ with DAG(
     task_id='ex-kube-secrets',
     name='ex-kube-secrets',
     namespace='default',
-    service_account_name="gkesa"
+    service_account_name="gkesa",
     image='alpine',
     cmds=["echo", "yellow yellow"],
     # The secrets to pass to Pod, the Pod will fail to create if the
