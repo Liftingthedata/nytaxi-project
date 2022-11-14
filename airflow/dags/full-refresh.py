@@ -58,7 +58,7 @@ with DAG(
         cluster_name=CLUSTER_NAME,
         cmds=["bash ./extract_data.sh yellow"],
         namespace="default",
-        image="google/cloud-sdk:slim",
+        image="eu.gcr.io/stella-luxury-taxi/transfer-pod",
         secrets=[aws_secret, gcp_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET},
     )
