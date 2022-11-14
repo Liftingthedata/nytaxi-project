@@ -64,5 +64,3 @@ with DAG(
     )
 
     from_s3_to_gcs
-
-    spark_job = PythonOperator()
