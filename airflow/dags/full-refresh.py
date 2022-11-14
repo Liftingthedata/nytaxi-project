@@ -45,6 +45,34 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
+from airflow import DAG
+from datetime import datetime, timedelta
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.bash_operator import BashOperator
+import time
+
+dag_name = 'dagName'
+
+default_args = {
+    'owner': 'Airflow',
+    'start_date':datetime(2022,2,16),
+    'schedule_interval':'@once',
+    'retries': 1,
+    'retry_delay': timedelta(seconds=5),
+    'depends_on_past': False,
+    'catchup':False
+}
+
+with DAG(dag_name,default_args=default_args) as dag:
+
+    t1 = DummyOperator(task_id="start")
+
+    t2 = BashOperator(task_id='hello_world',
+                        bash_command='echo "Hi!!"')
+    
+    t3 = DummyOperator(task_id="end")
+    
+    t1 >> t2 >> t3
 
 # # credentials = compute_engine.Credentials()
 # aws_secret = Secret(
@@ -56,50 +84,50 @@ logger.addHandler(ch)
 #     # Key in the form of service account file name
 #     key='aws-creds.json')
 
-gcp_secret = Secret(
-    deploy_type="volume",
-    deploy_target="etc/gcp/",
-    secret="gcsfs-creds",
-    key="keyfile.json",
-)
+# gcp_secret = Secret(
+#     deploy_type="volume",
+#     deploy_target="etc/gcp/",
+#     secret="gcsfs-creds",
+#     key="keyfile.json",
+# )
 
-# os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__key_secret_name={gcp_secret}'
+# # os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__key_secret_name={gcp_secret}'
 
-default_args = {
-    "owner": "airflow",
-    "start_date": datetime.now(),
-    "depends_on_past": False,
-    "retries": 2,
-    "retry_delay": timedelta(minutes=60),
+# default_args = {
+#     "owner": "airflow",
+#     "start_date": datetime.now(),
+#     "depends_on_past": False,
+#     "retries": 2,
+#     "retry_delay": timedelta(minutes=60),
    
-}
+# }
 
-with DAG(
-    dag_id="full-refresh",
-    schedule_interval=None,
-    default_args=default_args,
-    catchup=False,
-    tags=["full-refresh"],
-) as dag:
-    CLUSTER_NAME = "gke-cluster"
-    PROJECT = os.getenv("PROJECT")
-    CLUSTER_REGION = os.getenv("CLUSTER_REGION")
-    STAGING_BUCKET = os.getenv("STAGING_BUCKET")
+# with DAG(
+#     dag_id="full-refresh",
+#     schedule_interval=None,
+#     default_args=default_args,
+#     catchup=False,
+#     tags=["full-refresh"],
+# ) as dag:
+#     CLUSTER_NAME = "gke-cluster"
+#     PROJECT = os.getenv("PROJECT")
+#     CLUSTER_REGION = os.getenv("CLUSTER_REGION")
+#     STAGING_BUCKET = os.getenv("STAGING_BUCKET")
 
-    from_s3_to_gcs = GKEStartPodOperator(
-        # The ID specified for the task.
-        task_id="data-transfer-task",
-        # Name of task you want to run, used to generate Pod ID.
-        name="data-transfer-task",
-        project_id=PROJECT,
-        location=CLUSTER_REGION,  # type: ignore
-        cluster_name=CLUSTER_NAME,
-        cmds=["/bin/bash", "./extract_data.sh", "yellow"],
-        namespace="default",
-        image="eu.gcr.io/stella-luxury-taxi/transfer-pod1",
-        secrets=[gcp_secret],
-        env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
-                 , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
-    )
+#     from_s3_to_gcs = GKEStartPodOperator(
+#         # The ID specified for the task.
+#         task_id="data-transfer-task",
+#         # Name of task you want to run, used to generate Pod ID.
+#         name="data-transfer-task",
+#         project_id=PROJECT,
+#         location=CLUSTER_REGION,  # type: ignore
+#         cluster_name=CLUSTER_NAME,
+#         cmds=["/bin/bash", "./extract_data.sh", "yellow"],
+#         namespace="default",
+#         image="eu.gcr.io/stella-luxury-taxi/transfer-pod1",
+#         secrets=[gcp_secret],
+#         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
+#                  , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
+#     )
 
-    from_s3_to_gcs
+#     from_s3_to_gcs
