@@ -93,7 +93,7 @@ with DAG(
         project_id=PROJECT,
         location=CLUSTER_REGION,  # type: ignore
         cluster_name=CLUSTER_NAME,
-        cmds=["/bin/bash/", "echo", "hello"]
+        cmds=["/bin/bash/", "echo", "hello"],
 #         cmds=["/bin/bash", "./extract_data.sh", "yellow"],
         namespace="default",
         image="alpine",
