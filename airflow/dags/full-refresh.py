@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 from airflow import DAG
 from airflow.kubernetes.secret import Secret
+from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 
 # from airflow.models.baseoperator import chain
 # from airflow.operators.bash import BashOperator
@@ -85,21 +86,35 @@ with DAG(
     CLUSTER_REGION = os.getenv("CLUSTER_REGION")
     STAGING_BUCKET = os.getenv("STAGING_BUCKET")
 
-    from_s3_to_gcs = GKEStartPodOperator(
-        # The ID specified for the task.
-        task_id="data-transfer-task",
-        # Name of task you want to run, used to generate Pod ID.
-        name="data-transfer-task",
-        project_id=PROJECT,
-        location=CLUSTER_REGION,  # type: ignore
-        cluster_name=CLUSTER_NAME,
-        cmds=["/bin/bash/", "echo", "hello"],
-#         cmds=["/bin/bash", "./extract_data.sh", "yellow"],
-        namespace="default",
-        image="alpine",
-#         secrets=[gcp_secret],
-        env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
-                 , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
-    )
+    
+   kubernetes_secret_vars_ex = KubernetesPodOperator(
+    task_id='ex-kube-secrets',
+    name='ex-kube-secrets',
+    namespace='default',
+    image='alpine',
+    cmds=["/bin/bash", "./extract_data.sh", "yellow"],
+    # The secrets to pass to Pod, the Pod will fail to create if the
+    # secrets you specify in a Secret object do not exist in Kubernetes.
+    # env_vars allows you to specify environment variables for your
+    # container to use. env_vars is templated.
+    env_vars={
+        'EXAMPLE_VAR': '/example/value',
+        'GOOGLE_APPLICATION_CREDENTIALS': '/var/secrets/google/service-account.json '})
+#     from_s3_to_gcs = GKEStartPodOperator(
+#         # The ID specified for the task.
+#         task_id="data-transfer-task",
+#         # Name of task you want to run, used to generate Pod ID.
+#         name="data-transfer-task",
+#         project_id=PROJECT,
+#         location=CLUSTER_REGION,  # type: ignore
+#         cluster_name=CLUSTER_NAME,
+#         cmds=["/bin/bash/", "echo", "hello"],
+# #         cmds=["/bin/bash", "./extract_data.sh", "yellow"],
+#         namespace="default",
+#         image="alpine",
+# #         secrets=[gcp_secret],
+#         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
+#                  , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
+#     )
 
-    from_s3_to_gcs
+    kubernetes_secret_vars_ex
