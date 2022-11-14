@@ -12,10 +12,10 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.google.cloud.operators.kubernetes_engine import (
     GKEStartPodOperator,
 )
-from google.auth import compute_engine
+# from google.auth import compute_engine
 
 
-credentials = compute_engine.Credentials()
+# credentials = compute_engine.Credentials()
 
 aws_secret = Secret(
     deploy_type="env",
