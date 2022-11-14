@@ -62,9 +62,10 @@ with DAG(
         project_id=PROJECT,
         location=CLUSTER_REGION,  # type: ignore
         cluster_name=CLUSTER_NAME,
-        cmds=["bash ./extract_data.sh yellow"],
+        cmds=["bash", "./extract_data.sh", "yellow"],
         namespace="default",
         image="eu.gcr.io/stella-luxury-taxi/transfer-pod",
+        servuce)account_name="gkesa"
         secrets=[aws_secret],
         env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET},
     )
