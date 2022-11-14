@@ -22,23 +22,16 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-from google.oauth2 import service_account
 
-credentials = service_account.Credentials.from_service_account_file(
-    '/secrets/keyfile.json')
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/secrets/keyfile.json"
-x = os.system("cat /secrets/keyfile.json")
-logger.info(x)
-
-# credentials = compute_engine.Credentials()
-aws_secret = Secret(
-    deploy_type='volume',
-    # Path where we mount the secret as volume
-    deploy_target='/etc/aws',
-    # Name of Kubernetes Secret
-    secret='aws-creds',
-    # Key in the form of service account file name
-    key='aws-creds.json')
+# # credentials = compute_engine.Credentials()
+# aws_secret = Secret(
+#     deploy_type='volume',
+#     # Path where we mount the secret as volume
+#     deploy_target='/etc/aws',
+#     # Name of Kubernetes Secret
+#     secret='aws-creds',
+#     # Key in the form of service account file name
+#     key='aws-creds.json')
 
 gcp_secret = Secret(
     deploy_type="volume",
