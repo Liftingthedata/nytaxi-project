@@ -16,20 +16,21 @@ from airflow.providers.google.cloud.operators.kubernetes_engine import (
 
 
 # credentials = compute_engine.Credentials()
-
 aws_secret = Secret(
-    deploy_type="env",
-    deploy_target="AWS_CREDS",
-    secret="aws-creds",
-    key="aws-creds.json",
-)
+    deploy_type='volume',
+    # Path where we mount the secret as volume
+    deploy_target='/etc/aws',
+    # Name of Kubernetes Secret
+    secret='aws-creds',
+    # Key in the form of service account file name
+    key='aws-creds.json')
 
-# gcp_secret = Secret(
-#     deploy_type="env",
-#     deploy_target="GOOGLE_APPLICATION_CREDENTIALS",
-#     secret="gcsfs-creds",
-#     key="keyfile.json",
-# )
+gcp_secret = Secret(
+    deploy_type="volume",
+    deploy_target="etc/gcp/",
+    secret="gcsfs-creds",
+    key="keyfile.json",
+)
 
 # os.environ['AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT'] = f'google-cloud-platform://?extra__google_cloud_platform__key_secret_name={gcp_secret}'
 
@@ -67,7 +68,8 @@ with DAG(
         image="eu.gcr.io/stella-luxury-taxi/transfer-pod",
         servuce_account_name="gkesa"
         secrets=[aws_secret],
-        env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET},
+        env_vars={"PROJECT": PROJECT, "STAGING_BUCKET": STAGING_BUCKET, "AWS_CREDS": "/etc/aws/aws-creds.json"
+                 , "GOOGLE_APPLICATION_CREDENTIALS": "/etc/gcp/keyfile.json"},
     )
 
     from_s3_to_gcs
