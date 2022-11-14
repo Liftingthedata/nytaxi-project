@@ -34,6 +34,7 @@ default_args = {
     "depends_on_past": False,
     "retries": 2,
     "retry_delay": timedelta(minutes=60),
+    gcp_conn_id='google_cloud_default'
 }
 
 with DAG(
